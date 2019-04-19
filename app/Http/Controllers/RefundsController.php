@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Gate;
+use App\Type;
+use App\Item;
+use DB;
+use Auth;
 
 class RefundsController extends Controller
 {
@@ -17,7 +21,8 @@ class RefundsController extends Controller
         if(!Gate::allows('isUser')){
             abort(404,"Desculpe, você não tem acesso a essa área.");
         };
-        return view('refund.index');
+        $type = Type::all();
+        return view('refund.index', compact('type'));
     }
 
     /**
@@ -37,8 +42,19 @@ class RefundsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    { 
+        $count = count($request['type_id']);
+        $id_type = "";
+        for ($i=0; $i < $count; $i++) { 
+            $id_type = $id_type . $request['type_id'][$i].','; 
+        }
+        try {             
+            $request['type_id'] = substr($id_type, 0, -1 );
+            Item::create($request->all());
+            return "Cadastrado";
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 
     /**
@@ -49,7 +65,8 @@ class RefundsController extends Controller
      */
     public function show($id)
     {
-        //
+        $type = Type::where('id' , $id)->get();
+        dd($type);
     }
 
     /**
@@ -60,7 +77,9 @@ class RefundsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $type = Type::where('id' , $id)->get();
+        dump($type);
+        return 'chama o form '.$id;
     }
 
     /**

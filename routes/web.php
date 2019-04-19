@@ -20,3 +20,4 @@ Route::get('/pending', ['as' => 'pending.index', 'uses' => 'PendingsController@i
 Route::get('/aproved', ['as' => 'aproved.index', 'uses' => 'AprovedsController@index']);
 Route::get('/refund', ['as' => 'refund.index', 'uses' => 'RefundsController@index']);
 Route::get('/detail', ['as' => 'detail.index', 'uses' => 'DetailsController@index']);
+Route::resource('items' , 'RefundsController');
